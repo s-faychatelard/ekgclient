@@ -18,7 +18,7 @@ class ekgclientTests: XCTestCase {
     }
     
     func testLive_Sending() {
-        let exp = self.expectationWithDescription("network")
+        let exp = self.expectation(description: "network")
         
         let appInfo = AppInfo(appIdentifier: "com.dummy", version: "1.0.yo", build: "1234")
         let serverInfo = ServerInfo(host: NSURL(string: "http://localhost:3000")!)
@@ -27,12 +27,12 @@ class ekgclientTests: XCTestCase {
         let types = ["github": 2, "bitbucket": 3]
         let event = HeartbeatEvent(uptime: 10, typesOfRunningSyncers: types)
         
-        client.sendEvent(event) { (error) -> () in
+        client.sendEvent(event: event) { (error) -> () in
             XCTAssertNil(error)
             exp.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(60, handler: nil)
+        self.waitForExpectations(timeout: 60, handler: nil)
     }
 
 }

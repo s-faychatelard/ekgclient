@@ -1,7 +1,7 @@
 use_frameworks!
 
 def networking
-  pod 'Alamofire', '= 2.0.0-beta.3'
+  pod 'Alamofire', '~> 4.5.1'
 end
 
 target 'ekgclient' do

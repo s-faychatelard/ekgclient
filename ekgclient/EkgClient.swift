@@ -35,13 +35,13 @@ public class EkgClient {
     private let sender: Sender
     
     //persistence
-    private let userDefaults: NSUserDefaults
+    private let userDefaults: UserDefaults
     
     //token
-    private var token: String { get { return EkgClientHelper.getLocalToken(self.userDefaults) } }
+    private var token: String { get { return EkgClientHelper.getLocalToken(userDefaults: self.userDefaults) } }
     
     public init(
-        userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults(),
+        userDefaults: UserDefaults = UserDefaults.standard,
         appInfo: AppInfo,
         serverInfo: ServerInfo
         ) {
@@ -49,26 +49,26 @@ public class EkgClient {
             self.userDefaults = userDefaults
             self.appInfo = appInfo
             self.serverInfo = serverInfo
-            self.sender = SenderFactory.senderFromServerInfo(serverInfo)
+        self.sender = SenderFactory.senderFromServerInfo(serverInfo: serverInfo)
     }
     
-    public func sendEvent(event: Event, completion: ((error: ErrorType?) -> ())? = nil) {
+    public func sendEvent(event: Event, completion: ((_ error: Error?) -> ())? = nil) {
         
         //take event data
         var combined = event.jsonify()
         
         //combine with app data and token
         let appData = self.appInfo.jsonify()
-        combined = combined.merge(appData).merge(["token": self.token])
+        combined = combined.merge(other: appData).merge(other: ["token": self.token])
         
-        self.sender.sendEvent(combined, completion: completion)
+        self.sender.sendEvent(event: combined, completion: completion)
     }
 }
 
 extension Dictionary {
     func merge(other: Dictionary) -> Dictionary {
         var copy = self
-        other.forEach { (let key, let value) -> () in
+        other.forEach { (key, value) -> () in
             copy.updateValue(value, forKey: key)
         }
         return copy

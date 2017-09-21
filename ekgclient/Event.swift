@@ -11,7 +11,7 @@ import Foundation
 //event types
 //https://github.com/czechboy0/ekg/blob/master/routes/utils/events.js#L24
 
-public typealias JSON = [String: AnyObject]
+public typealias JSON = [String: Any]
 public protocol Sendable {
     func jsonify() -> JSON
 }
@@ -48,7 +48,7 @@ public class HeartbeatEvent: Event {
     }
     
     var numberOfRunningSyncers: Int {
-        return self.typesOfRunningSyncers.values.reduce(0, combine: +)
+        return self.typesOfRunningSyncers.values.reduce(0, +)
     }
     
     public override func jsonify() -> JSON {
